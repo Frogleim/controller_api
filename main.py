@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import controller
 import time
@@ -29,5 +29,8 @@ def goods(data: Good):
     for i in range(1):
         time.sleep(10)
         response = controller.get_good(ndeck=data.shelf_number, ndisp=data.spiral_number)
-    time.sleep(1)
-    return {'Response': response}
+        if b"x1a" in response:
+            time.sleep(1)
+            return {'Response': response}
+        else:
+            raise HTTPException(status_code=400, detail="Controller error")
