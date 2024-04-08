@@ -33,16 +33,17 @@ def send_command(command):
     ser.timeout = 4.3
     ser.write(command)
     #response = ser.read(1)
-    response = ser.read(1)
+    response_all =  ser.readlines()
+
+    response = ser.read(2)
     ser.close()
+    print(f'All response: {response_all}')
     return response
 
 def send_command_and_read_all(command):
     ser = serial.Serial(COM_PORT, baudrate=BAUD_RATE)
     ser.timeout = 4.3
     ser.write(command)
-    response_1 = ser.read(1)
-    print(response_1)
     response = ser.readline()
     ser.close()
     return response
