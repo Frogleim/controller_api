@@ -15,9 +15,9 @@ app = FastAPI()
 
 @app.middleware("http")
 async def whitelist_ips(request: Request, call_next):
-    client_host = request.client.port
+    client_host = request.client.host
     # Only allow 0.0.0.0 to access this API
-    if client_host != "5000":
+    if client_host != "0.0.0.0":
         return JSONResponse(status_code=403, content={"message": "Access forbidden"})
     response = await call_next(request)
     return response
