@@ -13,14 +13,6 @@ class Good(BaseModel):
 app = FastAPI()
 
 
-@app.middleware("http")
-async def whitelist_ips(request: Request, call_next):
-    client_host = request.client.host
-    # Only allow 0.0.0.0 to access this API
-    if client_host != "0.0.0.0":
-        return JSONResponse(status_code=403, content={"message": "Access forbidden"})
-    response = await call_next(request)
-    return response
 
 
 @app.post('/get_goods/')
@@ -29,6 +21,7 @@ def goods(data: Good):
     for i in range(8):
         response = controller.get_good(ndeck=data.shelf_number, ndisp=data.spiral_number)
         #        time.sleep(18)
+        print(data.shelf_number, data.spiral_number)
         if b"\x1a" in response:
             return {'Response': response}
         else:
